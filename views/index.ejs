@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Messages</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+            border: 1px solid #f1f1f1;
+        }
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chat-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .sent {
+            align-self: flex-end;
+            background: #007bff;
+            color: white;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        .received {
+            align-self: flex-start;
+            background: #e8e8e8;
+            color: #333;
+            border-radius: 0 12px 12px 12px;
+        }
+
+        .sender {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #e84118;
+            transform: scale(1.05);
+        }
+
+        .new-chat-link {
+            font-size: 18px;
+            color: #007bff;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        .new-chat-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <a href="http://localhost:8080/chats/new" class="new-chat-link">New Chat</a>
+    <div class="chat-container">
+        <% for(chat of chats) { %>
+            <div class="chat-box <% if(chat.from === 'You') { %>sent<% } else { %>received<% } %>">
+                <p class="sender"><%= chat.from %> ➝ <%= chat.to %></p>
+                <p class="message"><%= chat.msg %></p>
+                <p class="timestamp"><%= new Date(chat.createdAt).toLocaleString() %></p>
+                <p><a href="http://localhost:8080/chats/<%=chat.id %>/edit">Edit Chat</a></p>
+                <p>
+                    <form method="post" action="http://localhost:8080/chats/<%=chat.id %>?_method=DELETE">
+                        <button type="submit">Delete</button>
+                    </form>
+                </p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
